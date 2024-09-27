@@ -7,7 +7,7 @@ module.exports = {
         login: "url('./assets/images/background-night-view.jpg')",
       },
       colors: {
-        primary: "#6667AB",
+        primary: "var(--primary-color)",
         kakao: "#FEE500",
         link: "#6BB7FF",
       },

@@ -1,5 +1,3 @@
-import React from "react";
-
 interface LoginButtonProps {
   title: string;
   imageSrc: string;
@@ -7,12 +5,12 @@ interface LoginButtonProps {
   onClick: () => void;
 }
 
-const LoginButton: React.FC<LoginButtonProps> = ({
+const LoginButton = ({
   title,
   imageSrc,
   backgroundColor,
   onClick,
-}) => {
+}: LoginButtonProps) => {
   return (
     <div
       className={`w-full h-12 px-2 flex justify-center items-center ${backgroundColor} rounded-xl cursor-pointer`}

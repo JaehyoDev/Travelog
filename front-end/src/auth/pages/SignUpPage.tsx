@@ -1,79 +1,201 @@
-import React, { useState } from "react";
-import LoginButton from "../../common/components/LoginButton";
-import KakaoLoginButton from "../components/KakaoLoginButton";
+import { useState } from "react";
+import Select, {
+  OptionProps,
+  components,
+  SingleValue,
+  SingleValueProps,
+} from "react-select";
+import LogoSection from "../../common/components/LogoSection";
+import countryData from "../../assets/data/countryData";
+import {
+  NationalityOption,
+  convertCountryDataToOptions,
+} from "../../@types/NationalityOption";
 
 import { IoAirplaneSharp } from "react-icons/io5";
 
-// https://kr.pinterest.com/pin/pinterest--304626362290560695/
 const SignUpPage = () => {
-  const [username, setUsername] = useState("");
-  const [credentials, setCredentials] = useState({
-    username: "",
+  const [formData, setFormData] = useState({
+    id: "",
     password: "",
+    verifyPassword: "",
+    name: "",
+    nationality: "",
   });
 
   // 아이디, 비밀번호 입력값이 바뀔 때
   const handleChange = (field: string | number, value: string | number) => {
-    setCredentials((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // 로그인
-  const handleLogin = () => {
-    // e.preventDefault();
-    console.log("로그인 시도");
-  };
-
-  // 회원가입 페이지로 리다이렉트
   const handleSignUp = () => {
-    // 회원가입 페이지로의 네비게이션을 추가하세요
-    console.log("회원가입 페이지로 이동");
+    console.log("회원가입!", formData);
+  };
+
+  // 국가 데이터(countryData)를 react-select에서 사용할 옵션 형식으로 변환
+  const countryOptions = convertCountryDataToOptions(countryData);
+
+  // 커스텀 옵션 컴포넌트 생성
+  const CustomOption = (props: OptionProps<NationalityOption>) => {
+    return (
+      <components.Option {...props}>
+        <div className="flex items-center">
+          <img
+            className="w-6 h-4 mr-3"
+            src={props.data.flagUrl}
+            alt={props.data.label}
+          />
+          {props.data.label} {/* 여기서 label이 문자열이어야 검색 가능 */}
+        </div>
+      </components.Option>
+    );
+  };
+
+  // 국가 변경
+  const handleNationalityChange = (
+    selectedOption: SingleValue<NationalityOption> | null
+  ) => {
+    if (selectedOption) {
+      setFormData((prev) => ({
+        ...prev,
+        nationality: selectedOption.value,
+      }));
+    }
+  };
+
+  // 선택된 국가 표시
+  const CustomSingleValue = (props: SingleValueProps<NationalityOption>) => {
+    return (
+      <div className="flex items-center">
+        <img
+          className="w-6 h-4 mr-3"
+          src={props.data.flagUrl}
+          alt={props.data.label}
+        />
+        {props.data.label}
+      </div>
+    );
   };
 
   return (
-    <div>
-      {/* <LogoSection /> */}
-      <div>
-        <div>
-          <span>
+    <div className="w-screen h-screen overflow-hidden bg-login bg-cover bg-center bg-no-repeat">
+      {/* 로고 - 시작 */}
+      <LogoSection />
+      {/* 로고 - 끝 */}
+
+      {/* 회원가입 - 시작 */}
+      <div className="absolute top-[50%] right-[19%] transform translate-y-[-50%] w-80 p-4 bg-transparent border-2 border-white border-opacity-20 rounded-lg backdrop-blur-lg shadow-lg">
+        {/* 제목 */}
+        <div className="mb-8 flex justify-center items-center gap-2 text-2xl text-white">
+          <span className="flex items-center">
             <IoAirplaneSharp />
           </span>
-          <span>Check In</span>
+          <span className="flex items-center">Sign Up</span>
         </div>
 
-        <div>
-          <label htmlFor="Username">Username</label>
+        <div className="relative w-full h-12 mb-4">
           <input
-            id="Username"
+            className="w-full h-full p-4 bg-transparent outline-none border-2 border-white border-opacity-20 rounded-2xl text-white"
             type="text"
-            value={credentials.username}
-            onChange={(e) => handleChange("username", e.target.value)}
+            name="id"
+            value={formData.id}
+            placeholder="ID"
+            onChange={(e) => handleChange("id", e.target.value)}
           />
         </div>
 
-        <div>
-          <label htmlFor="Password">Password</label>
+        <div className="relative w-full h-12 mb-4">
           <input
-            id="Password"
+            className="w-full h-full p-4 bg-transparent outline-none border-2 border-white border-opacity-20 rounded-2xl text-white"
             type="password"
-            value={credentials.password}
+            name="password"
+            value={formData.password}
+            placeholder="Password"
             onChange={(e) => handleChange("password", e.target.value)}
           />
         </div>
 
-        <div></div>
-
-        <div>
-          <label>
-            <input type="checkbox" />
-            Remember me
-          </label>
-          <button>Forgot password?</button>
+        <div className="relative w-full h-12 mb-4">
+          <input
+            className="w-full h-full p-4 bg-transparent outline-none border-2 border-white border-opacity-20 rounded-2xl text-white"
+            type="text"
+            name="name"
+            value={formData.name}
+            placeholder="Name"
+            onChange={(e) => handleChange("name", e.target.value)}
+          />
         </div>
 
-        <div>
-          <span>Don't have an account?</span>
-          <button>Register</button>
+        {/* 국적 선택 Custom Select Box */}
+        <div className="mb-4">
+          {/* react-select는 옵션이 변경될 때마다 자동으로 선택된 값 표시. 추가 렌더링 코드 필요 없음 */}
+          <Select
+            name="nationality"
+            options={countryOptions}
+            onChange={handleNationalityChange}
+            placeholder="Select your nationality"
+            isMulti={false} // 다중 선택을 비활성화
+            isSearchable={true} // 검색 기능 비활성화
+            isClearable={true} // 입력값을 지울 수 있도록 설정
+            menuPlacement="auto" // 드롭다운 위치 자동
+            components={{
+              SingleValue: CustomSingleValue,
+              Option: CustomOption,
+            }}
+            styles={{
+              menu: (provided) => ({
+                ...provided,
+                transition: "none",
+              }),
+              control: (provided) => ({
+                ...provided,
+                width: "100%",
+                height: "3rem",
+                borderRadius: "1rem",
+              }),
+              valueContainer: (provided) => ({
+                ...provided,
+                display: "flex",
+                paddingLeft: "1rem",
+              }),
+              option: (provided) => ({
+                ...provided,
+                paddingLeft: "1rem",
+                color: "black",
+              }),
+              placeholder: (provided) => ({
+                ...provided,
+                position: "absolute",
+                color: "black",
+              }),
+              indicatorsContainer: (provided) => ({
+                ...provided,
+                paddingRight: "0.5rem",
+              }),
+              dropdownIndicator: (provided) => ({
+                ...provided,
+                paddingRight: "0.5rem",
+              }),
+            }}
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 0,
+              colors: {
+                ...theme.colors,
+                primary50: "red", // 클릭 시 배경색
+                primary25: "lightgrey", // 호버 시 배경색
+                primary: "var(--primary-color)", // 선택된 배경색
+              },
+            })}
+          />
         </div>
+
+        <button
+          className="w-full h-12 px-2 flex justify-center items-center bg-primary rounded-xl"
+          onClick={handleSignUp}
+        >
+          Sign Up
+        </button>
       </div>
     </div>
   );

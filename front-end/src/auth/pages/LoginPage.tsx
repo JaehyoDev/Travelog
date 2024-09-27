@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LogoSection from "../../common/components/LogoSection";
 import StandardLoginButton from "../components/StandardLoginButton";
 import KakaoLoginButton from "../components/KakaoLoginButton";
 
@@ -9,7 +10,7 @@ import { IoAirplaneSharp, IoPerson, IoLockClosed } from "react-icons/io5";
 const LoginPage = () => {
   const nav = useNavigate();
   const [credentials, setCredentials] = useState({
-    username: "",
+    id: "",
     password: "",
   });
 
@@ -33,12 +34,7 @@ const LoginPage = () => {
   return (
     <div className="w-screen h-screen overflow-hidden bg-login bg-cover bg-center bg-no-repeat">
       {/* 로고 - 시작 */}
-      <div className="absolute top-[28%] left-[20%] text-white">
-        <h1 className="mb-4 text-6xl">Travelog</h1>
-        <span className="">
-          Every trip has a story. Write yours with Travelog.
-        </span>
-      </div>
+      <LogoSection />
       {/* 로고 - 끝 */}
 
       {/* 로그인 - 시작 */}
@@ -56,9 +52,9 @@ const LoginPage = () => {
           <input
             className="w-full h-full p-4 pr-8 bg-transparent outline-none border-2 border-white border-opacity-20 rounded-2xl text-white"
             type="text"
-            name="username"
-            value={credentials.username}
-            placeholder="Username"
+            name="id"
+            value={credentials.id}
+            placeholder="ID"
             onChange={handleChange}
           />
           <IoPerson className="absolute top-[50%] right-4 transform translate-y-[-50%] text-gray-400" />
