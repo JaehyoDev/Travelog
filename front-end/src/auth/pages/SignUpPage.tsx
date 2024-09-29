@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import Select, {
   OptionProps,
   components,
   SingleValue,
   SingleValueProps,
 } from "react-select";
+import axios from "axios";
 import LogoSection from "../../common/components/LogoSection";
 import countryData from "../../assets/data/countryData";
 import {
@@ -15,21 +18,51 @@ import {
 import { IoAirplaneSharp } from "react-icons/io5";
 
 const SignUpPage = () => {
+  const nav = useNavigate();
   const [formData, setFormData] = useState({
-    id: "",
+    username: "",
     password: "",
-    verifyPassword: "",
-    name: "",
+    nickname: "",
     nationality: "",
   });
 
-  // 아이디, 비밀번호 입력값이 바뀔 때
-  const handleChange = (field: string | number, value: string | number) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  // 아이디, 비밀번호, 닉네임 입력값이 바뀔 때
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSignUp = () => {
-    console.log("회원가입!", formData);
+  // 국가 입력값이 바뀔 때
+  const handleNationalityChange = (
+    selectedOption: SingleValue<NationalityOption> | null
+  ) => {
+    if (selectedOption) {
+      setFormData((prev) => ({
+        ...prev,
+        nationality: selectedOption.value,
+      }));
+      toast.success(selectedOption.value);
+    }
+  };
+
+  // 회원가입
+  const handleSignUp = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8089/travelog/user/signup",
+        JSON.stringify(formData),
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      if (response.status === 201) {
+        console.log("회원가입 성공!");
+        toast.success("회원가입 성공!");
+        nav("/login");
+      }
+    } catch (error) {
+      console.error("에러 발생: ", error);
+    }
+    console.log("회원가입 요청!", formData);
   };
 
   // 국가 데이터(countryData)를 react-select에서 사용할 옵션 형식으로 변환
@@ -49,18 +82,6 @@ const SignUpPage = () => {
         </div>
       </components.Option>
     );
-  };
-
-  // 국가 변경
-  const handleNationalityChange = (
-    selectedOption: SingleValue<NationalityOption> | null
-  ) => {
-    if (selectedOption) {
-      setFormData((prev) => ({
-        ...prev,
-        nationality: selectedOption.value,
-      }));
-    }
   };
 
   // 선택된 국가 표시
@@ -97,10 +118,10 @@ const SignUpPage = () => {
           <input
             className="w-full h-full p-4 bg-transparent outline-none border-2 border-white border-opacity-20 rounded-2xl text-white"
             type="text"
-            name="id"
-            value={formData.id}
-            placeholder="ID"
-            onChange={(e) => handleChange("id", e.target.value)}
+            name="username"
+            value={formData.username}
+            placeholder="Username"
+            onChange={handleChange}
           />
         </div>
 
@@ -111,7 +132,7 @@ const SignUpPage = () => {
             name="password"
             value={formData.password}
             placeholder="Password"
-            onChange={(e) => handleChange("password", e.target.value)}
+            onChange={handleChange}
           />
         </div>
 
@@ -119,10 +140,10 @@ const SignUpPage = () => {
           <input
             className="w-full h-full p-4 bg-transparent outline-none border-2 border-white border-opacity-20 rounded-2xl text-white"
             type="text"
-            name="name"
-            value={formData.name}
-            placeholder="Name"
-            onChange={(e) => handleChange("name", e.target.value)}
+            name="nickname"
+            value={formData.nickname}
+            placeholder="Nickname"
+            onChange={handleChange}
           />
         </div>
 
@@ -194,7 +215,7 @@ const SignUpPage = () => {
           className="w-full h-12 px-2 flex justify-center items-center bg-primary rounded-xl"
           onClick={handleSignUp}
         >
-          Sign Up
+          Create your account
         </button>
       </div>
     </div>

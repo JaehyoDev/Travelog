@@ -1,0 +1,22 @@
+server:
+  port: 8089
+  servlet:
+    context-path: /travelog
+
+spring:
+  profiles:
+    default: local
+
+  datasource:
+    url: jdbc:mysql://jaehyodev.cvgg6oiwax77.ap-northeast-2.rds.amazonaws.com:3306/travelog?serverTimezone=Asia/Seoul
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: admin
+    password: tjfl0610
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true

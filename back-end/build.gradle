@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.2'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = "org.example"
+version = "1.0-SNAPSHOT"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot Starters
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-web-services'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // JJWT 의존성
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5") // 기존
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5") // 추가
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5") // 추가
+
+    // 개발 도구
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // MySQL Connector
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // 테스트
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.test {
+    useJUnitPlatform()
+}

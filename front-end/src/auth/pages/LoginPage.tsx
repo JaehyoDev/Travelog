@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import LogoSection from "../../common/components/LogoSection";
 import StandardLoginButton from "../components/StandardLoginButton";
 import KakaoLoginButton from "../components/KakaoLoginButton";
 
 import { IoAirplaneSharp, IoPerson, IoLockClosed } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 // https://kr.pinterest.com/pin/pinterest--304626362290560695/
 const LoginPage = () => {
   const nav = useNavigate();
   const [credentials, setCredentials] = useState({
-    id: "",
+    username: "",
     password: "",
   });
 
@@ -21,9 +24,22 @@ const LoginPage = () => {
   };
 
   // 로그인
-  const handleLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    console.log("로그인 시도");
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8089/travelog/user/login",
+        JSON.stringify(credentials),
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      if (response.status == 200) {
+        console.log("로그인 성공!");
+        toast.success("로그인 성공!");
+      }
+    } catch (error) {
+      console.error("에러 발생: ", error);
+    }
+    console.log("로그인 요청!", credentials);
   };
 
   // 회원가입 페이지로 리다이렉트
@@ -52,9 +68,9 @@ const LoginPage = () => {
           <input
             className="w-full h-full p-4 pr-8 bg-transparent outline-none border-2 border-white border-opacity-20 rounded-2xl text-white"
             type="text"
-            name="id"
-            value={credentials.id}
-            placeholder="ID"
+            name="username"
+            value={credentials.username}
+            placeholder="Username"
             onChange={handleChange}
           />
           <IoPerson className="absolute top-[50%] right-4 transform translate-y-[-50%] text-gray-400" />
@@ -75,7 +91,7 @@ const LoginPage = () => {
 
         {/* 로그인 버튼 */}
         <div className="flex flex-col gap-2">
-          <StandardLoginButton />
+          <StandardLoginButton onClick={handleLogin} />
           <KakaoLoginButton />
         </div>
 
