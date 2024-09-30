@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@RequestBody UserDto userDto) {
-        userService.join(userDto);
+        userService.signUp(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

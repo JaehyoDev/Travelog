@@ -27,7 +27,7 @@ const LoginPage = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8089/travelog/user/login",
+        "http://localhost:8089/api/users/login",
         JSON.stringify(credentials),
         { headers: { "Content-Type": "application/json" } }
       );

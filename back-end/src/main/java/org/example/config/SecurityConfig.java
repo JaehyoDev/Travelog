@@ -31,7 +31,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/user/signup", "/user/login").permitAll() // 로그인과 회원가입 요청은 허용
+                                .requestMatchers("/api/users/signup", "/api/users/login").permitAll() // 로그인과 회원가입 요청은 허용
                                 .anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
                 )
                 .sessionManagement(sessionManagement ->

@@ -49,7 +49,7 @@ const SignUpPage = () => {
   const handleSignUp = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8089/travelog/user/signup",
+        "http://localhost:8089/api/users/signup",
         JSON.stringify(formData),
         { headers: { "Content-Type": "application/json" } }
       );
