@@ -35,6 +35,7 @@ const LoginPage = () => {
       if (response.status == 200) {
         console.log("로그인 성공!");
         toast.success("로그인 성공!");
+        nav("/world");
       }
     } catch (error) {
       console.error("에러 발생: ", error);
