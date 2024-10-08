@@ -3,8 +3,13 @@
 @tailwind utilities;
 
 :root {
+  --kakao-color: #fee500;
+  --link-color: #6bb7ff;
   --primary-color: #b3b5e0;
   --primary-color-hover: #6667ab;
+  --header-color: #1a1d1f;
+  --sidebar-color: #1e2224;
+  --background-color: #212529;
 }
 
 body {
